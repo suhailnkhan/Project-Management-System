@@ -19,5 +19,15 @@
 
  <button type="submit" class="btn btn-success btn-lg">Submit</button>
     </form>
+
+@if($errors -> count())
+   <div class="alert alert-danger">
+       @foreach($errors->all() as $error)
+ {{$error}}<br>
+
+       @endforeach
+   </div>
+
+    @endif
    </div>
 @endsection
