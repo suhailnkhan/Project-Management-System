@@ -14,7 +14,8 @@ use App\Post;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+
+    return view('auth.login');
 });
 
 Auth::routes();
@@ -29,17 +30,40 @@ Route::get('/home', 'HomeController@index')->name('home');
 //
 //});
 
+$userId = Auth::id();
 
-Route::group(['prefix'=>'/user', 'middleware'=>'auth'], function () {
 
-     Route::get('/index','PostController@index');
-     Route::get('/create','PostController@create');
-     Route::get('/{id}/edit','PostController@edit');
-     Route::get('/store','PostController@store');
-     Route::get('/{id}/show','PostController@show');
-     Route::patch('/{id}/update','PostController@update');
-     Route::delete('/{id}/delete','PostController@destroy');
+Route::group(['prefix'=>'/admin', 'middleware'=>'auth'], function () {
+
+    Route::get('/index','AdminController@index');
+    Route::get('/createTask','AdminController@createTask');
+    Route::get('/{id}/edit','AdminController@edit');
+    Route::get('/store','AdminController@StoreTask');
+    Route::get('/{id}/show','AdminController@show');
+    Route::patch('/{id}/update','AdminController@update');
+    Route::delete('/{id}/delete','AdminController@destroyUser');
+    Route::get('/{id}/editPost','AdminController@editPost');
+    Route::patch('/{id}/updatePost', 'AdminController@updatePost');
+    Route::get('/storeUser', 'AdminController@storeUser');
+    Route::get('/createUser', 'AdminController@create');
+    Route::DELETE('/{id}/destroyPost', 'AdminController@destroyPost');
+
 
 
 
 });
+
+
+    Route::group(['prefix' => '/user', 'middleware' => 'auth'], function () {
+
+        Route::get('/index', 'PostController@index');
+        Route::get('/create', 'PostController@create');
+        Route::get('/{id}/edit', 'PostController@edit');
+        Route::get('/store', 'PostController@store');
+        Route::get('/{id}/show', 'PostController@show');
+        Route::patch('/{id}/update', 'PostController@update');
+        Route::delete('/{id}/delete', 'PostController@destroy');
+
+
+    });
+

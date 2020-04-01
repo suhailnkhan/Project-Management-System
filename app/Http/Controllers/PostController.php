@@ -6,7 +6,9 @@ namespace App\Http\Controllers;
 use App\Post;
 use Illuminate\Http\Request;
 use App\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+
+// call It Post controller or Task Controller  . This Part actually controls the taks of the employees
 
 class PostController extends Controller
 {
@@ -15,21 +17,19 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    // display the Task of the employee
     public function index()
-    {
+      {
         // using one to many relationship .
-       $uid =  Auth::user()->id;
-       $user = User::find($uid);
-
-       $projects = $user->posts;
-
-        return view('Cred.index',[
+             $uid =  Auth::user()->id;
+             $user = User::find($uid);
+             $projects = $user->posts;
+             return view('Cred.index',[
             'projects' => $projects
 
         ]);
-
-
-
+/*
 //$post = Post::first();
 //dd($user->posts);
         //$projects = Post::all();
@@ -38,9 +38,9 @@ class PostController extends Controller
 //
 //        //return $user->id;
 //
+  */
 
-
-    }
+      }
 
     /**
      * Show the form for creating a new resource.
@@ -48,11 +48,11 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    //redirects to create page to create the tasks
+
     public function create()
     {
-
-            return view('Cred.create');
-
+        return view('Cred.create');
     }
 
     /**
@@ -68,6 +68,7 @@ class PostController extends Controller
     {
         $uid =  Auth::user()->id;
         $user = User::find($uid);
+
         $this->validate($request,[
             'title'=>'required' ,
             'text'=>'required'
@@ -98,6 +99,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
+
         $uid = Auth::user()->id;
         $userPostid = Post::find($id)->user_id;
         if ($uid == $userPostid) {
@@ -135,10 +137,6 @@ class PostController extends Controller
 
        }
 
-
-
-
-
     /**
      * Update the specified resource in storage.
      *
@@ -148,7 +146,6 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $uid = Auth::user()->id;
         $userPostid = Post::find($id)->user_id;
         if ($uid == $userPostid) {
@@ -161,8 +158,6 @@ class PostController extends Controller
         else{
             return redirect('/user/index');
         }
-
-
     }
     /**
      * Remove the specified resource from storage.
@@ -170,22 +165,18 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+
     public function destroy($id)
     {
-        //
         $uid = Auth::user()->id;
         $userPostid = Post::find($id)->user_id;
         if ($uid == $userPostid) {
-
         $projects=Post::find($id);
         $projects->delete();
-
         return redirect('/user/index');
-
-
     } else{
             return redirect('/user/index');
         }
-
     }
 }

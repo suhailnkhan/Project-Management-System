@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Dashboard
+                    <div class="card-header">
                        <a class="btn btn-success pull-right" href="{{url('/user/create')}}">Create</a>
                     </div>
 
@@ -17,7 +17,7 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                            <div class="table">
+                            <div class="table table-bordered table-condensed table-striped">
 
 
                                 <table class="table">
@@ -27,6 +27,8 @@
                                         <th scope="col">Post</th>
                                         <th scope="col">Created On</th>
                                         <th scope="col">Updated On</th>
+                                        <th scope="col">Operations</th>
+
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -39,15 +41,17 @@
                                                 <td>{{$project->Text}}</td>
                                                 <td>{{$project->created_at}}</td>
                                                  <td>{{$project->updated_at}}</td>
-                                                <td> <a class="btn  btn-primary"  href="{{url('/user/'. $project->id.'/show')}}">Show</a></td>
-                                                <td>  <a class="btn btn-warning" href="{{url('/user/'. $project->id.'/edit')}}">Edit</a></td>
-                                                 <form action="{{url('/user/'.$project->id.'/delete')}}" method="POST">
-                                                     @csrf
-                                                     @method('DELETE')
+                                                <td> <a class="btn  btn-primary"  href="{{url('/user/'. $project->id.'/show')}}">Show</a>
+                                               <a class="btn btn-warning" href="{{url('/user/'. $project->id.'/edit')}}">Edit</a></td>
 
-                                                <td> <button class="btn  btn-danger">Delete</button></td>
 
-                                                 </form>
+{{--                                                 <form action="{{url('/user/'.$project->id.'/delete')}}" method="POST">--}}
+{{--                                                     @csrf--}}
+{{--                                                     @method('DELETE')--}}
+
+{{--                                                <td> <button class="btn  btn-danger">Delete</button></td>--}}
+
+{{--                                                 </form>--}}
 
 
                                             </tr>
