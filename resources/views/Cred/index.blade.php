@@ -7,6 +7,7 @@
                 <div class="card">
                     <div class="card-header">
                        <a class="btn btn-success pull-right" href="{{url('/user/create')}}">Create</a>
+                        <a class="btn btn-success pull-right" href="{{url('/user/map')}}" >  Go to Weather Api </a>
                     </div>
 
                     </div>
@@ -18,7 +19,6 @@
                             </div>
                         @endif
                             <div class="table table-bordered table-condensed table-striped">
-
 
                                 <table class="table">
                                     <thead>
@@ -83,5 +83,5 @@
                 </div>
             </div>
         </div>
-    </div>
+
 @endsection

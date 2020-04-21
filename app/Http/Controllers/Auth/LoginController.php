@@ -34,8 +34,9 @@ class LoginController extends Controller
     //protected $redirectTo = 'user/index'     ;    //RouteServiceProvider::HOME;
 
 
-    public function authenticated($request , $user){
-        if($user->Role=='admin'){
+    protected function authenticated($request , $user){
+
+        if($user->Role=='admin' || $user->Role=='Assign'){
 
             return redirect('/admin/index');
 

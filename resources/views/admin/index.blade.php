@@ -5,8 +5,14 @@
             <div class="col-md-10">
                 <div class="card ">
                     <div class="card-header">
+
                         <a class="btn btn-success pull-right" href="{{url('/admin/createTask')}}">Create Task</a>
                         <a class="btn btn-info pull-right" href="{{url('/admin/createUser')}}">Add User</a>
+                        <a class="btn btn-success pull-right" href="{{url('/user/map')}}" >  Go to Weather Api </a>
+
+                        @can('assigntask',Auth::user())
+                        <a class="btn btn-success pull-right" href="{{url('/admin/assigntask')}}" >  Assign Task</a>
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body">
@@ -35,7 +41,11 @@
                                         <td>{{$user->posts->count()}}</td>
                                         <td>{{$user->Role}}</td>
                                         <td> <a class="btn btn-sm  btn-primary"  href="{{url('/admin/'. $user->id.'/show')}}">Show Task List</a>
-                                         <a class="btn btn-warning btn-sm" href="{{url('/admin/'. $user->id.'/edit')}}">Edit User Details</a></td>
+                                        <a class="btn btn-warning btn-sm" href="{{url('/admin/'. $user->id.'/edit')}}">Edit User Details</a>
+                                        <a class="btn btn-warning btn-sm" href="{{url('/admin/'. $user->id.'/uploads')}}">upload documnets</a></td>
+
+                                         </td>
+
                                         <form action="{{url('/admin/'.$user->id.'/delete')}}" method="POST">
                                             @csrf
                                             @method('DELETE')

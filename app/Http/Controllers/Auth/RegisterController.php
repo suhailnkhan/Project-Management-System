@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeMail;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -29,8 +31,21 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
 
+
+
+   protected $redirectTo = '/user/index';
+
+//    protected function authenticated($request , $user){
+//
+//        if($user->Role=='admin' || $user->Role=='Assign'){
+//
+//            return redirect('/admin/index');
+//
+//        }else{
+//            return redirect('/user/index');
+//        }
+//    }
     /**
      * Create a new controller instance.
      *
@@ -54,6 +69,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+
     }
 
     /**
@@ -69,5 +85,8 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+//        Mail::to($data['email'])->send(new WelcomeMail());
+    //    Mail::to('user@exapmle.com')->send(new \App\Mail\WelcomeMail());
+
     }
 }

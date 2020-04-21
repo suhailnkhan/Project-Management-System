@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Post;
+use Illuminate\Support\Facades\Mail;
+use Spatie\Activitylog\Models\Activity;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,14 +15,29 @@ use App\Post;
 |
 */
 
-Route::get('/', function () {
 
+Route::get('/logs', function(){
+
+   return Activity::all();
+
+});
+
+Route::get('/email',function (){
+
+    Mail::to('example@exapmle.com')->send(new \App\Mail\WelcomeMail());
+
+   return new \App\Mail\WelcomeMail();
+
+
+});
+
+Route::get('/', function () {
     return view('auth.login');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
 
 //Route::group(['prefix'=>'dashboard', 'middleware'=>'auth'], function () {
 //    Route::get('/index','PostController@index');
@@ -34,7 +51,6 @@ $userId = Auth::id();
 
 
 Route::group(['prefix'=>'/admin', 'middleware'=>'auth'], function () {
-
     Route::get('/index','AdminController@index');
     Route::get('/createTask','AdminController@createTask');
     Route::get('/{id}/edit','AdminController@edit');
@@ -47,6 +63,22 @@ Route::group(['prefix'=>'/admin', 'middleware'=>'auth'], function () {
     Route::get('/storeUser', 'AdminController@storeUser');
     Route::get('/createUser', 'AdminController@create');
     Route::DELETE('/{id}/destroyPost', 'AdminController@destroyPost');
+    Route::get('/{id}/uploads','AdminController@uploads');
+    Route::get('{id}/uploadfiles','AdminController@uploadfiles');
+    Route::get('/delete/{id}/{uid}','AdminController@deletefiles');
+    Route::get('/download/{id}','AdminController@downloadfiles');
+    Route::get('/assigntask','AdminController@assigntask');
+    Route::get('{id}/assignedTask','AdminController@assignedTask');
+
+
+
+
+//    Route::get('/assigntask', function (){
+//        if (Gate::allows('assigntask', Auth::user())) {
+//            return view('');
+//        }
+//
+//    });
 
 
 
@@ -55,7 +87,6 @@ Route::group(['prefix'=>'/admin', 'middleware'=>'auth'], function () {
 
 
     Route::group(['prefix' => '/user', 'middleware' => 'auth'], function () {
-
         Route::get('/index', 'PostController@index');
         Route::get('/create', 'PostController@create');
         Route::get('/{id}/edit', 'PostController@edit');
@@ -63,7 +94,6 @@ Route::group(['prefix'=>'/admin', 'middleware'=>'auth'], function () {
         Route::get('/{id}/show', 'PostController@show');
         Route::patch('/{id}/update', 'PostController@update');
         Route::delete('/{id}/delete', 'PostController@destroy');
-
-
+        Route::get('/map', 'PostController@mapapi');
     });
 

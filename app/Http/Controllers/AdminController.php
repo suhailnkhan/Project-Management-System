@@ -1,11 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Events\NewCustHasRegEvent;
+use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use App\User;
 use App\Post;
+use App\Upload;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Response;
+
 
 class AdminController extends Controller
 {
@@ -21,7 +28,6 @@ class AdminController extends Controller
         return view('admin.index',[
               'users' => $users
         ]);
-
     }
 
     /**
@@ -43,7 +49,7 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-//create new task for any user by admin !
+    //create new task for any user by admin !
     public function storeTask(Request $request)
     {
         $name = $request->select;
@@ -52,8 +58,12 @@ class AdminController extends Controller
         {
            $user_id = $user->id;
         }
+
+
         $post = new Post;
-        $post->user_id =$user_id;
+        if($request->has('name')){
+        $post->user_id =$user_id;}
+
         $post->title = $request->title;
         $post->text = $request->text;
         $post->save();
@@ -164,19 +174,26 @@ class AdminController extends Controller
         $user->name = $request->name;
         $user->password = $password;
         $user->email = $request-> email;
-        $user->save();
-        return redirect('/admin/index');
+       if($request->hasFile('image')){
+           $file = $request->file('image');
+           $filename = $file->getClientOriginalName();
+           $file->move('userimg',$filename );
+           $user->image =  $filename;
+       }
 
+       $user->save();
+       event(new NewCustHasRegEvent($user));
+          return redirect('/admin/index');
     }
+
+
+    //delete user
     public function destroyUser($id)
     {
-
         $user = User::find($id);
-
             if($user->Role == 'admin') {
                 return redirect('/admin/index')->with('message', "Operation Not Allowed " );
             }else if( $user->posts->count() != 0  ){
-
                 return redirect('/admin/index')->with('message', "This user has task pending" );
             }
             else{
@@ -184,8 +201,6 @@ class AdminController extends Controller
                 return redirect('/admin/index');
             }
     }
-
-
     //Create user task
     public function createTask()
     {
@@ -196,14 +211,88 @@ class AdminController extends Controller
     }
     public function destroyPost($id)
     {
+
         $Post = Post::find($id);
         $Post->delete();
         return redirect('/admin/index');
-//        } else{
-//            return redirect('/user/index');
-//        }
-//    }
 }
+
+        // Files Upload section
+    public function uploads($id){
+            $user = User::find($id);
+            $user_id = $id;
+            //  $uploads = upload::find($user_id);
+            $uploads = DB::select('select * from uploads where user_id='.$id);
+            return view('admin/uploads',[
+                  'uploads' => $uploads,
+                  'users' => $user
+            ]);}
+
+
+
+    public function uploadfiles(Request $request , $id){
+                   $this->validate($request,[
+                  'file' => 'required|mimes:pdf,xlx,csv,jpeg|max:2048',
+        ]);
+
+        $user = User::find($id);
+         if($request->hasFile('file')){
+            $file = $request->file('file');
+            $filename = $file->getClientOriginalName();
+//           storeAs('upload', $filename);
+//           Storage::put( $filename, '');
+            $file->move('storage',$filename );
+
+
+            Upload::create([
+                'user_id' => $user->id,
+                'path'=>$filename,
+            ]);
+           return redirect('/admin/'.$user->id.'/uploads')->with('success' , 'File Uploaded');
+       }
+       else{
+           return redirect('/admin/'.$user->id.'/uploads')->with('message','Select file to upload');
+       }
+    }
+    public function deletefiles($id,$uid){
+        $file = Upload::find($id);
+        $file->delete();
+        return redirect('/admin/'.$uid.'/uploads');
+    }
+    public function downloadfiles($id){
+        $file = Upload::find($id);
+        $path = $file->path;
+        $filepath = public_path('/storage/').$path;
+        return Response::download($filepath);
+    }
+
+    public function assigntask(){
+   $user = User::All();
+        $posts = Post::all();
+        $post=DB::select("select * from posts where user_id  is null");
+
+        return  view('/admin/assigntask',[
+
+            'posts'=>$post,
+            'users' => $user
+
+
+        ]);
+
+    }
+    public function assignedTask(Request $request, $id)
+    {
+        $name = $request->user;
+        $users = User::where('name',$name)->get();
+        foreach ($users as $user)
+        {
+          $user_id = $user->id;
+        }
+        $post  = Post::find($id);
+        $post->user_id  = $user_id;
+        $post->save();
+        return redirect('/admin/');
+    }
 
 
 }

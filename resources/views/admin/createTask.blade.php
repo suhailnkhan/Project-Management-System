@@ -14,7 +14,9 @@
 
                 <label for="title">Select User:</label>
                 <select class="form-control" id="select" name="select">
-
+{{--                    @can('makeunassignedtask' , Auth::user())--}}
+                         <option>--</option>
+{{--                    @endcan--}}
                     @foreach($users as $user)
 
                     <option>{{$user->name}}</option>

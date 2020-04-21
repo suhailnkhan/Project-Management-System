@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Providers;
-
+use App\Policies\Assign;
+use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,6 +15,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
+
+        //'App\User' => assign::class
+        User::class => Assign::class
     ];
 
     /**
@@ -25,6 +29,19 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
-    }
+        Gate::define('assigntask', 'App\Policies\Assign@Assign_only');
+
+
+        Gate::define('makeunassignedtask', function ($user) {
+            return $user->admin;
+        });
+
+
+            //function ($user) {
+            //return $user->Role == 'Assign';
+      //return $user->Assign;
+
+
+}
+
 }

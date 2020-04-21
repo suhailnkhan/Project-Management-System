@@ -7,6 +7,10 @@ use App\Post;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
+use GuzzleHttp\Message\Response;
+use App\Upload;
 
 // call It Post controller or Task Controller  . This Part actually controls the taks of the employees
 
@@ -165,8 +169,6 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
-
     public function destroy($id)
     {
         $uid = Auth::user()->id;
@@ -178,5 +180,26 @@ class PostController extends Controller
     } else{
             return redirect('/user/index');
         }
+    }
+//this show the weather api
+
+    public function mapapi(Request $request){
+if($request->has('location')){
+    $location = $request->location;
+}else if($request->has('locationgps')){
+   // dd($_SERVER);
+    $ip ='103.62.95.168' ;
+    $data = \Location::get($ip);
+        $location =  $data->cityName;
+
+}else{
+    $location = 'srinagar';
+}
+        $apikey = '8ed445e2b64246f774d8efe0668536d0';
+        $response = Http::get("api.openweathermap.org/data/2.5/weather?q=$location&appid=$apikey&units=metric");
+        $result =  json_decode($response->getbody());
+        return view('Cred.mapapi',[
+            'data' => $result
+       ]);
     }
 }

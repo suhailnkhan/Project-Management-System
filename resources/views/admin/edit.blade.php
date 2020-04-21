@@ -23,6 +23,12 @@
                 <input type="text" class="form-control" id="name" name="role" value="{{$user->Role}}">
             </div>
 
+            <div class="form-group">
+                <label for="image">Profile Pic</label>
+             <img src="{{asset('/userimg/'. $user->image)}}">
+            </div>
+
+
             <button type="submit" class="btn btn-success btn-lg">Submit</button>
         </form>
     </div>
