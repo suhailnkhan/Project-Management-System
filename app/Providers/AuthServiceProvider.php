@@ -27,14 +27,27 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         $this->registerPolicies();
 
         Gate::define('assigntask', 'App\Policies\Assign@Assign_only');
+        Gate::define('AccessAdmin', 'App\Policies\Assign@AccessAdmin');
 
 
         Gate::define('makeunassignedtask', function ($user) {
             return $user->admin;
         });
+
+        Gate::define('deleteuser','App\Policies\Assign@Delete_user');
+
+
+
+        Gate::define('viewpage', function ($user) {
+            return $user->admin;
+        });
+
+
+
 
 
             //function ($user) {

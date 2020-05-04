@@ -52,4 +52,5 @@
         <a class="btn btn-success" href=" {{url('/admin/index')}} ">Back</a>
 
     </div>
+    </div>
     @endsection

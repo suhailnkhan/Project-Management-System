@@ -16,6 +16,14 @@ use Response;
 
 class AdminController extends Controller
 {
+
+    public function __construct()
+    {
+$this->middleware('auth');
+
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -25,6 +33,7 @@ class AdminController extends Controller
     public function index()
     {
         $users = User::all();
+
         return view('admin.index',[
               'users' => $users
         ]);
@@ -58,12 +67,9 @@ class AdminController extends Controller
         {
            $user_id = $user->id;
         }
-
-
         $post = new Post;
         if($request->has('name')){
         $post->user_id =$user_id;}
-
         $post->title = $request->title;
         $post->text = $request->text;
         $post->save();
@@ -139,8 +145,7 @@ class AdminController extends Controller
         //
     }
 
-
-         //edit Any user's Task when logged in from admin redirects to updatePost
+    //edit Any user's Task when logged in from admin redirects to updatePost
     public function editPost($id)
     {
         $post  = Post::find($id);
@@ -293,6 +298,33 @@ class AdminController extends Controller
         $post->save();
         return redirect('/admin/');
     }
+
+
+    public function Search(Request $request)
+    {
+
+        $name = $request->input;
+
+        $user = DB::table('users')->where('name', 'LIKE', '%' . $name . '%')->get();
+//         $found = User::where('name' , 'LIKE' .'%'. $name. '%' )->get();
+        return view('/admin/indexs', [
+
+            'users' => $user
+
+
+        ]);
+
+    }
+
+    public function message(){
+        return view('admin.mail');
+        }
+
+
+
+
+
+
 
 
 }

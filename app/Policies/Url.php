@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class Assign
+class Url
 {
     use HandlesAuthorization;
 
@@ -18,6 +18,7 @@ class Assign
     {
         //
     }
+
 
     public function Assign_only($user){
 
@@ -33,30 +34,4 @@ class Assign
 //            }
 
     }
-
-
-    public function AccessAdmin($user){
-
-        return $user->Role == 'admin'  ;
-
-    }
-
-
-
-    public function Delete_user($user){
-
-        return $user->Role == 'admin';
-//
-//            if($user->Role == 'Assign') {
-//
-//                return true;
-//
-//            }else{
-//
-//                return false;
-//            }
-
-    }
-
-
 }

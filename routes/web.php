@@ -48,9 +48,10 @@ Auth::routes();
 //});
 
 $userId = Auth::id();
+//,
+//Route::group(['prefix'=>'/admin','middleware'=>'auth'], function () {
 
-
-Route::group(['prefix'=>'/admin', 'middleware'=>'auth'], function () {
+Route::group(['prefix'=>'/admin', 'middleware'=>'can:AccessAdmin'], function () {
     Route::get('/index','AdminController@index');
     Route::get('/createTask','AdminController@createTask');
     Route::get('/{id}/edit','AdminController@edit');
@@ -69,18 +70,10 @@ Route::group(['prefix'=>'/admin', 'middleware'=>'auth'], function () {
     Route::get('/download/{id}','AdminController@downloadfiles');
     Route::get('/assigntask','AdminController@assigntask');
     Route::get('{id}/assignedTask','AdminController@assignedTask');
-
-
-
-
-//    Route::get('/assigntask', function (){
-//        if (Gate::allows('assigntask', Auth::user())) {
-//            return view('');
-//        }
-//
-//    });
-
-
+    Route::get('/search','AdminController@Search');
+    Route::get('/message','MessageController@viewPage');
+    Route::get('/SendMessage','MessageController@SendMessage');
+    Route::delete('/{id}/deletemail','MessageController@destroyMail');
 
 
 });
@@ -95,5 +88,9 @@ Route::group(['prefix'=>'/admin', 'middleware'=>'auth'], function () {
         Route::patch('/{id}/update', 'PostController@update');
         Route::delete('/{id}/delete', 'PostController@destroy');
         Route::get('/map', 'PostController@mapapi');
+        Route::get('/message','MessageController@viewPage');
+        Route::get('/SendMessage','MessageController@SendMessage');
+        Route::get('/message','MessageController@viewPage');
+        Route::get('/SendMessage','MessageController@SendMessage');
     });
 

@@ -3,11 +3,13 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                       <a class="btn btn-success pull-right" href="{{url('/user/create')}}">Create</a>
-                        <a class="btn btn-success pull-right" href="{{url('/user/map')}}" >  Go to Weather Api </a>
+                       <a class="btn btn-success " href="{{url('/user/create')}}">Create</a>
+                      <a class="btn btn-success pull-right" href="{{url('/user/map')}}" >  Go to Weather Api </a>
+                        <a class="btn btn-warning " href="{{url('/user/message')}}">Message</a>
+
                     </div>
 
                     </div>
@@ -41,27 +43,24 @@
                                                 <td>{{$project->Text}}</td>
                                                 <td>{{$project->created_at}}</td>
                                                  <td>{{$project->updated_at}}</td>
-                                                <td> <a class="btn  btn-primary"  href="{{url('/user/'. $project->id.'/show')}}">Show</a>
-                                               <a class="btn btn-warning" href="{{url('/user/'. $project->id.'/edit')}}">Edit</a></td>
+                                                <td> <a class="btn  btn-primary btn-sm"  href="{{url('/user/'. $project->id.'/show')}}">Show</a>
+                                               <a class="btn btn-warning  btn-sm" href="{{url('/user/'. $project->id.'/edit')}}">Edit</a>
 
+                                                </td>
 
-{{--                                                 <form action="{{url('/user/'.$project->id.'/delete')}}" method="POST">--}}
+    {{--                                                 <form action="{{url('/user/'.$project->id.'/delete')}}" method="POST">--}}
 {{--                                                     @csrf--}}
 {{--                                                     @method('DELETE')--}}
 
 {{--                                                <td> <button class="btn  btn-danger">Delete</button></td>--}}
 
 {{--                                                 </form>--}}
-
-
                                             </tr>
                                                             @endforeach
-                                                              @else
+
                                               <tr>
-
-                                            <td>
+                                            <td>  @else
                                                 <p colspan="5" class="text-danger text-center"> No Data Found </p></td>
-
                                             @endif
 
                                     </tr>

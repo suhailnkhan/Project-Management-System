@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "midnite81/geolocation": "^1.0",
+        "pusher/pusher-php-server": "^4.1",
         "spatie/laravel-activitylog": "^3.14",
         "stevebauman/location": "^5.0"
     },

@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 
@@ -61,6 +63,30 @@ class User extends Authenticatable
 
 
 
+    public function  isonline(){
+
+
+        return Cache::has('user-is-online'. $this->id);
+    }
+
+
+
+    public function sent()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    // A user can also receive a message
+    public function received()
+    {
+        return $this->hasMany(Message::class, 'sent_to_id');
+    }
+
+
+//    public function Role($Role) {
+//        $Role = (array)$Role;
+//        return in_array($this->Role, $Role);
+//    }
 //    public function uploads()
 //    {
 //        return $this->hasMany(\App\Upload::class);
